@@ -1,18 +1,13 @@
-import java.util.Objects;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
-// todo una volta finita la partita chiedere al player se vuole continuare
-// todo resettare le vite una volta che l'utente ha vinto
-// todo impostare il punteggio massimo e stamparlo in console
-// todo
+
 public class Main {
 
     static int scelta;
     static int vite;
     static int punteggioMax;
 
-    static int numeroDaIndovinare;
+    static List<Integer> numeroDaIndovinare;
 
     static Random random = new Random();
 
@@ -22,32 +17,47 @@ public class Main {
 
     static boolean continuazione = true;
 
+    static List<Integer> sceltePrecedenti = new ArrayList<>();
+
 
     public static void main(String[] args) {
-        System.out.println("scegli un numero compreso tra 0 e 10");
+        System.out.println("scegli un numero compreso tra 0 e 100");
         scelta = sc.nextInt();
-        vite = 10;
-        numeroDaIndovinare = random.nextInt(5);
+        sceltePrecedenti.add(scelta);
+        vite = 20;
+        numeroDaIndovinare = Arrays.asList(
+                random.nextInt(100),
+                random.nextInt(100),
+                random.nextInt(100),
+                random.nextInt(100),
+                random.nextInt(100),
+                random.nextInt(100),
+                random.nextInt(100),
+                random.nextInt(100),
+                random.nextInt(100),
+                random.nextInt(100)
+        );
 
         while (continuazione) {
             while (vite > 1) {
-                if (scelta == numeroDaIndovinare) {
+                if (numeroDaIndovinare.contains(scelta)) {
                     System.out.println("complimenti! hai indovinato il numero!");
                     if (punteggioMax < vite) {
                         punteggioMax = vite;
                     }
+                    System.out.println("i numeri erano: " + numeroDaIndovinare);
                     System.out.println("il tuo punteggio massimo è: " + punteggioMax);
                     break;
                 } else {
-                    if (scelta > numeroDaIndovinare) {
-                        vite--;
-                        System.out.println("il numero è scelto è troppo grande, ti rimangono " + vite + " vite");
-                        scelta = sc.nextInt();
-                    } else if (scelta < numeroDaIndovinare) {
-                        vite--;
-                        System.out.println("il mumero scelto è troppo piccolo, ti rimangono " + vite + " vite");
-                        scelta = sc.nextInt();
+                    if (sceltePrecedenti.contains(scelta)) {
+                        System.out.println("hai già inserito questi numeri: " + sceltePrecedenti);
                     }
+                    vite--;
+                    System.out.println("il numero è sbagliato, ti rimangono " + vite + " vite");
+                    scelta = sc.nextInt();
+                    sceltePrecedenti.add(scelta);
+
+
                 }
             }
 
@@ -60,9 +70,21 @@ public class Main {
         sceltaGioco = sc.next();
         if (Objects.equals(sceltaGioco, "si")) {
             vite = 10;
-            numeroDaIndovinare = random.nextInt(5);
-            System.out.println("scegli un numero compreso tra 0 e 10");
+            numeroDaIndovinare = Arrays.asList(
+                    random.nextInt(100),
+                    random.nextInt(100),
+                    random.nextInt(100),
+                    random.nextInt(100),
+                    random.nextInt(100),
+                    random.nextInt(100),
+                    random.nextInt(100),
+                    random.nextInt(100),
+                    random.nextInt(100),
+                    random.nextInt(100)
+            );
+            System.out.println("scegli un numero compreso tra 0 e 100");
             scelta = sc.nextInt();
+            sceltePrecedenti.add(scelta);
         } else if (Objects.equals(sceltaGioco, "no")) {
             System.out.println("partita terminata");
             continuazione = false;
